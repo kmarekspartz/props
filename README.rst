@@ -126,7 +126,7 @@ to ensure the ``arbitrary`` method is implemented:
     class TestBinaryTree(AbstractTestArbitraryInterface,
                          TestCase):
         def setUp(self):
-            self.obj = BinaryTree
+            self.cls = BinaryTree
 
 To Do
 =====
