@@ -19,6 +19,34 @@ Here's an example testing the commutative and associative properties of
     for_all(int, int)(lambda a, b: a * b == b * a)
     for_all(int, int, int)(lambda a, b, c: c * (a + b) == a * c + b * c)
 
+Properties
+----------
+
+Properties are functions which take instances of generators and return
+``True`` if their condition is met:
+
+.. code:: python
+
+    def prop_associative(a, b, c):
+        return a + (b + c) == (a + b) + c
+        
+    for_all(int, int, int)(prop_associative)
+    for_all(float, float, float)(prop_associative)
+
+Properties can also fail early by raising ``AssertionError``:
+
+.. code:: python
+
+    def prop_list_append_pop(list, element):
+        if element not in list:
+            list.append(element)
+            assert element in list
+            list.pop()
+            return element not in list
+        return element in list
+        
+    for_all(list, int)(prop_list_append_pop)
+
 Generators
 ----------
 
