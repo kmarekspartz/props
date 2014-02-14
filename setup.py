@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='props',
-    version='0.0.1',
+    version='0.0.2',
     description='QuickCheck for Python',
     long_description=open('README.rst').read(),
     author='Kyle Marek-Spartz',
