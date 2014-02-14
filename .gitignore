@@ -1,3 +1,8 @@
 env
 .idea
 *.pyc
+*.tar.gz
+PKG-INFO
+SOURCES.txt
+dependency_links.txt
+top_level.txt
