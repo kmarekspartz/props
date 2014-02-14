@@ -7,8 +7,6 @@ import sys
 import random
 import collections
 
-from interface_mixins import Interface, AbstractInterfaceTest
-
 
 class ArbitraryInterface(object):
     """
