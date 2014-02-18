@@ -58,13 +58,13 @@ generator is either:
 - One of the following built-in types:
     - `None`, `bool`, `int`, `float`, `long`, `complex`, `str`, `tuple`,
       `set`, `list`, or `dict`
-- A class that implements the ArbitraryInterface
+- A class that implements the `ArbitraryInterface`
 - Or constructed using the generator combinators.
 
 ### Combinators
 
 - `maybe_a`
-    - Generates either an arbitrary value of the specified generator or None.
+    - Generates either an arbitrary value of the specified generator or `None`.
 - `maybe_an`
     - An alias for `maybe_a`. Provided for syntactic convenience.
 - `one_of`
