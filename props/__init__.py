@@ -5,13 +5,13 @@ Property-based testing for Python.
 """
 import sys
 import random
-import collections
+from collections.abc import Hashable
 
 
 class ArbitraryInterface(object):
     """
     Interface to inherit from in order to use your classes with Props.
-    
+
     *Note:* Please provide an implementation for the `arbitrary` method.
     """
     @classmethod
@@ -26,9 +26,9 @@ class ArbitraryInterface(object):
 class AbstractTestArbitraryInterface(object):
     """
     A test mixin to check for the existence of an `arbitrary` method.
-    
+
     To test this, mixin to your test case as following:
-        
+
         class TestYourClass(AbstractTestArbitraryInterface,
                             unittest.TestCase):
             def setUp(self):
@@ -66,7 +66,7 @@ class AbstractArbitrary(dict):
     """
     Helper class for the arbitrary function.
     Subclasses dict in order to allow for injection of type-level dispatch.
-    
+
     This is too clever to be idiomatic.
     """
     def __call__(self, cls):
@@ -84,40 +84,38 @@ class AbstractArbitrary(dict):
 
 
 arbitrary = AbstractArbitrary({
-    int: lambda: random.randint(-sys.maxint - 1, sys.maxint),
+    int: lambda: random.randint(-sys.maxsize - 1, sys.maxsize),
     bool: lambda: arbitrary(int) > 0,
     ## sys.float_info_max:
-    float: lambda: random.gauss(0, sys.maxint),
-    ## This isn't uniform:
-    long: lambda: long(arbitrary(int)) * arbitrary(int),
+    float: lambda: random.gauss(0, sys.maxsize),
     complex: lambda: complex(arbitrary(float), arbitrary(float)),
     str: lambda: ''.join(chr((i % 127) + 1) for i in arbitrary(list_of(int))),
     tuple: lambda: arbitrary(
         tuple_of(*[
             generator for generator in arbitrary.keys()
             if generator is not tuple
-            and issubclass(generator, collections.Hashable)
+            and issubclass(generator, Hashable)
         ])
     ),
     set: lambda: arbitrary(
         set_of(*[
             generator for generator in arbitrary.keys()
             if generator is not tuple
-            and issubclass(generator, collections.Hashable)
+            and issubclass(generator, Hashable)
         ])
     ),
     list: lambda: arbitrary(
         list_of(*[
             generator for generator in arbitrary.keys()
             if generator is not list
-            and issubclass(generator, collections.Hashable)
+            and issubclass(generator, Hashable)
         ])
     ),
     dict: lambda: arbitrary(
         dict_of(**{
             arbitrary(str): generator for generator in arbitrary.keys()
             if generator is not dict
-            and issubclass(generator, collections.Hashable)
+            and issubclass(generator, Hashable)
         })
     )
 })
@@ -163,8 +161,7 @@ def for_all(*generators):
                     generator_names,
                     '> do not satisfy a property.'
                 ])
-                print(error_message)
-                raise
+                raise AssertionError(error_message)
         for _ in range(n):
             test_once()
     return test_property

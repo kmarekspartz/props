@@ -27,9 +27,9 @@ if their condition is met:
 ~~~ python
 def prop_associative(a, b, c):
     return a + (b + c) == (a + b) + c
-    
+
 for_all(int, int, int)(prop_associative)
-for_all(float, float, float)(prop_associative)
+for_all(float, float, float)(prop_associative)  # Warning: float isn't actually associative!
 ~~~
 
 Properties can also fail early by raising `AssertionError`:
@@ -42,7 +42,7 @@ def prop_list_append_pop(list, element):
         list.pop()
         return element not in list
     return element in list
-    
+
 for_all(list, int)(prop_list_append_pop)
 ~~~
 
