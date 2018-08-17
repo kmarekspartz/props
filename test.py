@@ -1,30 +1,23 @@
-from props import *
-
 import unittest
 
-class TestProps(unittest.TestCase):
-    def test_examples_from_readme(self):
-        for_all(int, int)(lambda a, b: a + b == b + a)
-        for_all(int, int)(lambda a, b: a * b == b * a)
-        for_all(int, int, int)(lambda a, b, c: c * (a + b) == a * c + b * c)
+from props import AbstractTestArbitraryInterface, ArbitraryInterface, \
+    arbitrary, for_all
 
-        def prop_associative(a, b, c):
-            return a + (b + c) == (a + b) + c
+from examples import BinaryTree, prop_associative
 
-        for_all(int, int, int)(prop_associative)
 
+class ForgotToImplementArbitrary(ArbitraryInterface):
+    pass
+
+
+class TestProps(unittest.TestCase, AbstractTestArbitraryInterface):
+    def setUp(self):
+        self.cls = BinaryTree
+
+    def test_forgot_to_implement_arbitrary(self):
+        with self.assertRaises(NotImplementedError):
+            arbitrary(ForgotToImplementArbitrary)
+
+    def test_floats_are_not_associative(self):
         with self.assertRaises(AssertionError):
             for_all(float, float, float)(prop_associative)
-
-        def prop_list_append_pop(list, element):
-            if element not in list:
-                list.append(element)
-                assert element in list
-                list.pop()
-                return element not in list
-            return element in list
-
-        for_all(list, int)(prop_list_append_pop)
-
-if __name__ == '__main__':
-    unittest.main()

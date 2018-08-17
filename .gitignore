@@ -10,3 +10,5 @@ top_level.txt
 build
 dist
 
+htmlcov
+.coverage

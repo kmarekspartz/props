@@ -155,10 +155,3 @@ to ensure the ``arbitrary`` method is implemented:
                         TestCase):
        def setUp(self):
            self.cls = BinaryTree
-
-To Do
-=====
-
--  all built in types: http://docs.python.org/2/library/stdtypes.html
--  ranges
--  import some faker generators for more semantic random values

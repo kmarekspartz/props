@@ -1,0 +1,11 @@
+set -Ceux -o pipefail
+
+rm -rf build || echo 'No ./build to remove'
+
+pipenv run yapf -p -vv -i -r .
+
+pipenv run flake8
+
+pipenv run coverage run -m unittest -fv
+
+pipenv run coverage report -m

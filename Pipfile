@@ -7,6 +7,10 @@ name = "pypi"
 setuptools = "*"
 wheel = "*"
 twine = "*"
+mypy = "*"
+"flake8" = "*"
+yapf = "*"
+coverage = "*"
 
 [packages]
 
