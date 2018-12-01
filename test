@@ -2,6 +2,14 @@ set -Ceux -o pipefail
 
 rm -rf build || echo 'No ./build to remove'
 
+pipenv clean
+
+pipenv install
+
+pipenv install --dev
+
+pipenv check
+
 pipenv run yapf -p -vv -i -r .
 
 pipenv run flake8
