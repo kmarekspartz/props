@@ -14,7 +14,6 @@ class ArbitraryInterface(object):
 
     *Note:* Please provide an implementation for the `arbitrary` method.
     """
-
     @classmethod
     def arbitrary(cls):
         """
@@ -35,7 +34,6 @@ class AbstractTestArbitraryInterface(object):
             def setUp(self):
                 self.cls = YourClass
     """
-
     def test_arbitrary(self):
         """
         Checks for inheritance from `ArbitraryInterface` and for the
@@ -67,7 +65,6 @@ class AbstractArbitrary(dict):
 
     This is too clever to be idiomatic.
     """
-
     def __call__(self, cls):
         if cls is None:
             return None
@@ -81,40 +78,43 @@ class AbstractArbitrary(dict):
 
 
 arbitrary = AbstractArbitrary({
-    int: lambda: random.randint(-sys.maxsize - 1, sys.maxsize),
-    bool: lambda: arbitrary(int) > 0,
+    int:
+    lambda: random.randint(-sys.maxsize - 1, sys.maxsize),
+    bool:
+    lambda: arbitrary(int) > 0,
     # sys.float_info_max:
-    float: lambda: random.gauss(0, sys.maxsize),
-    complex: lambda: complex(arbitrary(float), arbitrary(float)),
-    str: lambda: ''.join(chr((i % 127) + 1) for i in arbitrary(list_of(int))),
-    tuple: lambda: arbitrary(
+    float:
+    lambda: random.gauss(0, sys.maxsize),
+    complex:
+    lambda: complex(arbitrary(float), arbitrary(float)),
+    str:
+    lambda: ''.join(chr((i % 127) + 1) for i in arbitrary(list_of(int))),
+    tuple:
+    lambda: arbitrary(
         tuple_of(*[
             generator for generator in arbitrary.keys()
-            if generator is not tuple
-            and issubclass(generator, Hashable)
-        ])
-    ),
-    set: lambda: arbitrary(
+            if generator is not tuple and issubclass(generator, Hashable)
+        ])),
+    set:
+    lambda: arbitrary(
         set_of(*[
             generator for generator in arbitrary.keys()
-            if generator is not tuple
-            and issubclass(generator, Hashable)
-        ])
-    ),
-    list: lambda: arbitrary(
+            if generator is not tuple and issubclass(generator, Hashable)
+        ])),
+    list:
+    lambda: arbitrary(
         list_of(*[
             generator for generator in arbitrary.keys()
-            if generator is not list
-            and issubclass(generator, Hashable)
-        ])
-    ),
-    dict: lambda: arbitrary(
-        dict_of(**{
-            arbitrary(str): generator for generator in arbitrary.keys()
-            if generator is not dict
-            and issubclass(generator, Hashable)
-        })
-    )
+            if generator is not list and issubclass(generator, Hashable)
+        ])),
+    dict:
+    lambda: arbitrary(
+        dict_of(
+            **{
+                arbitrary(str): generator
+                for generator in arbitrary.keys()
+                if generator is not dict and issubclass(generator, Hashable)
+            }))
 })
 
 
@@ -144,8 +144,8 @@ def for_all(*generators):
             try:
                 assert property_function(*instances)
             except AssertionError:
-                generator_names = ', '.join(
-                    generator.__name__ for generator in generators)
+                generator_names = ', '.join(generator.__name__
+                                            for generator in generators)
                 stringed_instances = ', '.join(
                     str(instance) for instance in instances)
                 error_message = ' '.join([
@@ -166,13 +166,11 @@ def maybe_a(generator):
     This is a class factory, it makes a class which is a closure around the
     specified generator.
     """
-
     class MaybeAGenerator(ArbitraryInterface):
         """
         A closure class around the generator specified above, which generates
         either that generator or None.
         """
-
         @classmethod
         def arbitrary(cls):
             """
@@ -197,13 +195,11 @@ def one_of(*generators):
     This is a class factory, it makes a class which is a closure around the
     specified generators.
     """
-
     class OneOfGenerators(ArbitraryInterface):
         """
         A closure class around the generators specified above, which
         generates one of the generators.
         """
-
         @classmethod
         def arbitrary(cls):
             """
@@ -225,13 +221,11 @@ def tuple_of(*generators):
     This is a class factory, it makes a class which is a closure around the
     specified generators.
     """
-
     class TupleOfGenerators(ArbitraryInterface):
         """
         A closure class around the generators specified above, which
         generates a tuple of the generators.
         """
-
         @classmethod
         def arbitrary(cls):
             """
@@ -255,13 +249,11 @@ def set_of(*generators):
     This is a class factory, it makes a class which is a closure around the
     specified generators.
     """
-
     class SetOfGenerators(ArbitraryInterface):
         """
         A closure class around the generators specified above, which
         generates a set of the generators.
         """
-
         @classmethod
         def arbitrary(cls):
             """
@@ -289,13 +281,11 @@ def list_of(*generators):
     This is a class factory, it makes a class which is a closure around the
     specified generators.
     """
-
     class ListOfGenerators(ArbitraryInterface):
         """
         A closure class around the generators specified above, which
         generates a list of the generators.
         """
-
         @classmethod
         def arbitrary(cls):
             """
@@ -324,13 +314,11 @@ def dict_of(**kwargs):
     This is a class factory, it makes a class which is a closure around the
     specified keys and generators.
     """
-
     class DictOfKeyGenerators(ArbitraryInterface):
         """
         A closure class around the keys and generators specified above, which
         generates a dict of the keys and generators.
         """
-
         @classmethod
         def arbitrary(cls):
             """
